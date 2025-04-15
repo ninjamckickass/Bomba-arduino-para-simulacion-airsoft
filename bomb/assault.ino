@@ -1,10 +1,8 @@
 // - Assault
-// Bomb has to be defended by team ALFA (blue) during Game Time. Attacking team, BRAVO
-// tem(red) objective is to arm the bomb and once armed must defend int until detonation, preventing
-// Alpha team to defuse it. The bomb can be armed and defused many times as the game time allows.
-// As an added game difficulty, the introduction of a code may be necessary to arm and disarm the
-// bomb.
-// Bomba puede armarse y desarmarse hasta que acabe el tiempo de juego
+// ALPHA team (blue) must defend the bomb during game time.
+// BRAVO team (red) tries to arm the bomb and defend it until detonation.
+// The bomb can be armed and disarmed multiple times until game time expires.
+// Optional: Password can be required for arming/disarming.
 
 void assault() {
   unsigned long relojBomba = 0;

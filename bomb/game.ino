@@ -1,4 +1,4 @@
-//  Funciones usadas por los distitos modos de juego
+// Functions used by different game modes
 
 
 
@@ -59,14 +59,14 @@ bool checkWire(unsigned long &reloj, bool cuttedWire[]) {
       cuttedWire[i] = true;
       pita();
       switch (tWIRE[i]) {
-        case 1: //-10 seg
+        case 1: //-10 sec
           reloj -= 1000;
           break;
-        case 2: //Cable correcto
+        case 2: //Correct wire
           return true;
           break;
         case 3:
-          // No hago nada ;P
+          // Do nothing ;P
           break;
         case 4: //BOOM!!!
           reloj = 0;
@@ -166,10 +166,10 @@ void drawPercentage(int col, int fil, int percentage) {
 }
 
 void drawProgressBar(int from, int to, int maxPercentage, int col, int fila) {
-  byte bar10[] = {0x0F, 0x18, 0x13, 0x17, 0x17, 0x13, 0x18, 0x0F}; //punta izquierda llena
-  byte bar11[] = {0x1F, 0x00, 0x18, 0x18, 0x18, 0x18, 0x00, 0x1F}; //centro mitad
-  byte bar12[] = {0x1F, 0x00, 0x1B, 0x1B, 0x1B, 0x1B, 0x00, 0x1F}; //centro lleno
-  byte bar13[] = {0x1E, 0x03, 0x19, 0x1D, 0x1D, 0x19, 0x03, 0x1E}; //punta derecha llena
+  byte bar10[] = {0x0F, 0x18, 0x13, 0x17, 0x17, 0x13, 0x18, 0x0F}; //left end full
+  byte bar11[] = {0x1F, 0x00, 0x18, 0x18, 0x18, 0x18, 0x00, 0x1F}; //center half
+  byte bar12[] = {0x1F, 0x00, 0x1B, 0x1B, 0x1B, 0x1B, 0x00, 0x1F}; //center full
+  byte bar13[] = {0x1E, 0x03, 0x19, 0x1D, 0x1D, 0x19, 0x03, 0x1E}; //right end full
 
   lcd.createChar(3, bar10);
   lcd.createChar(4, bar11);
@@ -194,10 +194,10 @@ void drawProgressBar(int from, int to, int maxPercentage, int col, int fila) {
 }
 
 void drawEmptyProgressBar(int fila) {
-  //barra vacia
-  byte bar00[] = {0x0F, 0x18, 0x10, 0x10, 0x10, 0x10, 0x18, 0x0F}; //punta izquierda
-  byte bar01[] = {0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F}; //centro
-  byte bar02[] = {0x1E, 0x03, 0x01, 0x01, 0x01, 0x01, 0x03, 0x1E}; //punta derecha
+  //empty bar
+  byte bar00[] = {0x0F, 0x18, 0x10, 0x10, 0x10, 0x10, 0x18, 0x0F}; //left end
+  byte bar01[] = {0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F}; //center
+  byte bar02[] = {0x1E, 0x03, 0x01, 0x01, 0x01, 0x01, 0x03, 0x1E}; //right end
 
   lcd.createChar(0, bar00);
   lcd.createChar(1, bar01);

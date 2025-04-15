@@ -1,11 +1,9 @@
 // - Domination
-// In this mode the device acts as a station or base. When game time cowntdown starts, base is in
-// neutral position. The objective for both teams is to capture the base, starting to add time on behalf
-// of capturing team. Once the base is captured, it starts to add minutes to the “owner” team and
-// subtracting minutes from the opposing team until both times become equal, from that pointon it
-// stops subtracting minutes from opposing team. If the base is in neutral position does not adds not
-// substract time for any team. If you have activated accelerometer and if the movement is excessive,
-// the base switches to neutral automaticly.
+// Device acts as a control point or base station.
+// Base starts in neutral state when game begins.
+// Teams compete to capture and hold the base.
+// When captured, base adds points to controlling team.
+// If accelerometer enabled, excessive movement neutralizes the base.
 void domination() {
   unsigned long reloj = 0;
   unsigned long points[2] = {0, 0};

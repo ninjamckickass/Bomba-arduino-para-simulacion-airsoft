@@ -1,7 +1,7 @@
 // - Explosive
-// In this game mode the bomb starts armed with the countdown to detonation already triggered. The
-// game ends when the bomb is detonated, or when it is disarmed. If the accelerometer option is
-// activated and movement is excessive pump will explode in 3 seconds.
+// Bomb starts armed with countdown active.
+// Game ends when bomb detonates or is disarmed.
+// If accelerometer enabled, excessive movement triggers 3-second detonation.
 
 void explosive() {
   unsigned long reloj = 0;

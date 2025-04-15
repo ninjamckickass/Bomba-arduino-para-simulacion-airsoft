@@ -1,22 +1,21 @@
 // - Counterstrike
-// There are three ways to finish the game.
-// Game time passes away and BRAVO team (red) has not succeeded in placing and arming device,
-// ALPHA team wins (blue).
-// BRAVO team is able to place and arm the bomb, but can not prevent ALFA team from disarming it.
-// ALPHA team (blue) wins.
-// BRAVO team is able to place and arm the bomb and ALPHA team fails in disarming it so the bomb
-// detonates. BRAVO team wins ( red).
-// As a recommendation for balancing team options the place or places where the bomb should be
-// placed should be half way for both teams to avoid defenders take too advantadge positions.
-// As an added element of difficulty for terrorists, there is an accelerometer in the bomb (activated or
-// not through the configuration "accelerometer" menu) that cause premature activation in case of
-// excessive movement.
-// As an added element of difficulty to the counter terrorist unit, deactivation pasword may be required
-// to defuse bomb (can be activated in the options menu Configuration "encryption" and "CODE") 5
-// digits.
-// To facilitate the transport, anchors are added to add a 2-point sling. (sling not included)
+// There are three ways to finish the game:
 //
-// Se arma y desarma 1 sola vez
+// 1. Game time passes and BRAVO team (red) has not succeeded in placing and arming device,
+//    ALPHA team wins (blue)
+// 2. BRAVO team places and arms the bomb, but ALPHA team disarms it before detonation.
+//    ALPHA team (blue) wins
+// 3. BRAVO team places and arms the bomb and it detonates before ALPHA team can disarm it.
+//    BRAVO team (red) wins
+//
+// The bomb can only be armed and disarmed once.
+// For game balance, bomb placement locations should be equidistant from both teams.
+//
+// Optional difficulty modifiers:
+// - Accelerometer: Excessive movement causes premature detonation
+// - Password: 5-digit code required to defuse bomb
+// - Sling mounting points available for transport (sling not included)
+
 void counterstrike() {
   unsigned long relojBomba = 0;
   unsigned long relojJuego = 0;

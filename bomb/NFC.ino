@@ -1,4 +1,4 @@
-//  Funciones que manejan la lectura y escritura de tarjetas NFC
+// Functions that handle reading and writing NFC cards
 int blockNumber = 2;
 int trailerBlock = (blockNumber / 4 * 4) + 3;
 
@@ -21,8 +21,12 @@ void mfr_halt() {
 void waitForNewNFC() {
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print(NFC_CARD_ON_READER);
+  lcd.print("Place card on reader");
   while ( ! mfrc522.PICC_IsNewCardPresent() || ! mfrc522.PICC_ReadCardSerial());
-  pita();
+  beep();
+}
+
+void beep() {
+  tone(BUZZPIN, 500, 100);
 }
 

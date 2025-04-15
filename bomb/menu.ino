@@ -1,7 +1,7 @@
-//Menus
+// Menu system functions
 
 void menu() {
-  printScreen(MENU_PRINCIPAL);
+  printScreen(MAIN_MENU);
   drawBomb(17, 0);
   switch (validOption(1, 2)) {
     case 1:
@@ -16,7 +16,7 @@ void menu() {
 void menuJuego() {
   int opt;
   do {
-    printScreen(MENU_JUEGO);
+    printScreen(GAME_MENU);
     drawBomb(17, 0);
     opt = validOption(0, 4);
     if (opt != 0) {
@@ -29,13 +29,13 @@ void menuJuego() {
       case 1: //1.-Counterstrike
         counterstrike();
         break;
-      case 2: //2.-Asalto
+      case 2: //2.-Assault
         assault();
         break;
-      case 3: //3.-Dominacion
+      case 3: //3.-Domination
         domination();
         break;
-      case 4: //4.-Explosivo
+      case 4: //4.-Explosive
         explosive();
         break;
     }
@@ -47,7 +47,7 @@ void menuJuego() {
 }
 
 void menuConfig() {
-  //1.-Tiempo", "2.-Mecanismo bloqueo", "3.-Otras opciones", "4.-Test
+  //1.-Time", "2.-Lock mechanism", "3.-Other options", "4.-Test
   int opt;
   do {
     printScreen(MENU_CONF);
@@ -70,7 +70,7 @@ void menuConfig() {
 }
 
 void menuTime() {
-  //1.-Tiempo de juego", "2.-Tiempo bomba", "3.-Tiempo des/armado", "4.-Tiempo inicio
+  //1.-Game time", "2.-Bomb time", "3.-Arm/disarm time", "4.-Start time
   int opt;
   do {
     printScreen(MENU_TIME);
@@ -105,7 +105,7 @@ void menuTime() {
           printScreen(MENU_TIME2);
           lcd.setCursor(0, 1);
           lcd.print(TIME_ARMDES);
-          lcd.print(" segundos");
+          lcd.print(" seconds");
           opt = validOption(0, 1);
           if (opt == 1) TIME_ARMDES = readSeconds();
         }
@@ -116,7 +116,7 @@ void menuTime() {
           printScreen(MENU_TIME2);
           lcd.setCursor(0, 1);
           lcd.print(INIT_TIME);
-          lcd.print(" segundos");
+          lcd.print(" seconds");
           opt = validOption(0, 1);
           if (opt == 1) INIT_TIME = readSeconds();
         }
@@ -126,7 +126,7 @@ void menuTime() {
   } while (opt != 0);
 }
 
-void menuLockers() {//1.-Bloqueos activos", "2.-Contraseña", "3.-Cables", "4.-Llaves NFC
+void menuLockers() {//1.-Active locks", "2.-Password", "3.-Wires", "4.-NFC keys
   int opt;
   do {
     printScreen(MENU_LOCKERS);
@@ -175,16 +175,16 @@ void menuLockers() {//1.-Bloqueos activos", "2.-Contraseña", "3.-Cables", "4.-L
 void menuNfc() {
   int opt;
   byte data[16] = {1, 1, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  //data[0] tipo
-  //data[1] numero usos
-  //data[2]:data[3]:data[4]:data[5] tiempo hh:mm:ss:ds
+  //data[0] type
+  //data[1] number of uses
+  //data[2]:data[3]:data[4]:data[5] time hh:mm:ss:ds
   do {
     printScreen(MENU_NFC);
     printData(data);
     opt = validOption(0, 3);
     switch (opt) {
       case 1:
-        while (opt != 0) {//1.-Tipo", "2.-Usos", "3.-Tiempo", ""
+        while (opt != 0) {//1.-Type", "2.-Uses", "3.-Time", ""
           printScreen(MENU_NFC_CONF);
           printData(data);
           opt = validOption(0, 3);
@@ -195,7 +195,7 @@ void menuNfc() {
               break;
             case 2:
               printScreen(MENU_NFC_USOS);
-              data[1] = validOption(1, 'A');// A = infinitos usos
+              data[1] = validOption(1, 'A');// A = infinite uses
               break;
             case 3:
               int auxR[4];
@@ -233,10 +233,10 @@ void menuActiveLockers() {
     check(MENU_ACTIVE_LOCKERS[1].length() + 1, 1, bWIRE);
     check(MENU_ACTIVE_LOCKERS[2].length() + 1, 2, bNFC);
     opt = validOption(0, 3);
-    if (opt == 1) bPASS = !bPASS;//Contraseña
-    if (opt == 2) bWIRE = !bWIRE;//Cables
-    if (opt == 3) bNFC = !bNFC;//Llave NFC
-  } while (opt != 0); //0.-Volver
+    if (opt == 1) bPASS = !bPASS;//Password
+    if (opt == 2) bWIRE = !bWIRE;//Wires
+    if (opt == 3) bNFC = !bNFC;//NFC key
+  } while (opt != 0); //0.-Back
 }
 
 void menuOtherOpt() {
@@ -271,7 +271,7 @@ void menuShock() {
         opt = validOption(0, 2);
         switch (opt) {
           case 1:
-            //ajuste manual SHOCK_SENSIBILITY != 0
+            //manual adjustment SHOCK_SENSIBILITY != 0
             printScreen(INTRO2NUM);
             opt = validOption(0, 9);
             lcd.setCursor(2, 0);
@@ -303,9 +303,9 @@ void menuShock() {
 void test() {
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("C1 o C2 o C3 o C4 o");
+  lcd.print("C1 or C2 or C3 or C4 or");
   lcd.setCursor(0, 1);
-  lcd.print("B1 o B2 o");
+  lcd.print("B1 or B2 or");
   lcd.setCursor(0, 3);
   lcd.print("NFC");
   char key;
@@ -416,7 +416,7 @@ int validOption(int minOpt, int maxOpt) {
   int opt;
   do {
     opt = keypad.waitForKey() - '0';
-    if (opt > 9) opt += '0'; // si es una letra
+    if (opt > 9) opt += '0'; // if it's a letter
   } while (opt < minOpt || opt > maxOpt);
   pita();
   return opt;
@@ -522,7 +522,7 @@ void newPass() {
       i++;
     }
     lcdBorra(0, 3, 19, 3);
-    for (int i2 = 0; i2 < i; i2++) {
+    for (int i2 = 0; i < i; i++) {
       lcd.setCursor(i2, 3);
       lcd.print(auxPass[i2]);
     }
