@@ -6,7 +6,18 @@
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
 
-//#include "lang.h"
+// --- Debugging ---
+#define DEBUG // Comment this line out to disable Serial debugging
+#ifdef DEBUG
+  #define DEBUG_PRINT(x) Serial.print(x)
+  #define DEBUG_PRINTLN(x) Serial.println(x)
+  #define DEBUG_PRINTF(fmt, ...) Serial.printf(fmt, __VA_ARGS__)
+#else
+  #define DEBUG_PRINT(x)
+  #define DEBUG_PRINTLN(x)
+  #define DEBUG_PRINTF(fmt, ...)
+#endif
+// --- End Debugging ---
 
 //Digit led display pins
 #define DIN 30
@@ -37,23 +48,22 @@ const int WIRE[4] = {14, 15, 16, 17};
 #define GREEN_BTN 19
 
 const byte rowsCount = 4;
-const byte columsCount = 4;
-char keys[rowsCount][columsCount] = {
+const byte columnsCount = 4; // renamed from columsCount
+char keys[rowsCount][columnsCount] = {
   { '1', '2', '3', 'A' },
   { '4', '5', '6', 'B' },
   { '7', '8', '9', 'C' },
   { '*', '0', '#', 'D' }
 };
 byte rowPins[rowsCount] = { KEY0, KEY1, KEY2, KEY3 };
-byte columnPins[columsCount] = { KEY4, KEY5, KEY6, KEY7 };
+byte columnPins[columnsCount] = { KEY4, KEY5, KEY6, KEY7 };
 
 DigitLedDisplay ld = DigitLedDisplay(DIN, LOAD, CLK);
-Keypad keypad = Keypad(makeKeymap(keys), rowPins, columnPins, rowsCount, columsCount);
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, columnPins, rowsCount, columnsCount);
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 #define RST_PIN 49
 #define SS_PIN 53
-
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 MFRC522::MIFARE_Key nfcKey;
@@ -66,8 +76,8 @@ const String GAME_MENU[] = {"1.-Counterstrike", "2.-Assault", "3.-Domination", "
 const String MENU_CONF[] = {"1.-Time", "2.-Lock mechanism", "3.-Other options", "4.-Test"};
 const String MENU_TIME[] = {"1.-Game time", "2.-Bomb time", "3.-Arm/Disarm time", "4.-Start time"};
 const String MENU_TIME2[] = {"Current time", "", "1.-Change", "0.-Back"};
-const String MENU_LOCKERS[] = {"1.-Active locks", "2.-Password", "3.-Wires", "4.-NFC Keys"};
-const String MENU_ACTIVE_LOCKERS[] = {"1.-Password", "2.-Wires", "3.-NFC Keys", ""};
+const String MENU_LOCKS[] = {"1.-Active locks", "2.-Password", "3.-Wires", "4.-NFC Keys"}; // was MENU_LOCKERS
+const String MENU_ACTIVE_LOCKS[] = {"1.-Password", "2.-Wires", "3.-NFC Keys", ""}; // was MENU_ACTIVE_LOCKERS
 const String MENU_PASS[] = {"Current password", "", "1.-Change", "0.-Back"};
 const String NEW_PASS[] = {"Enter new", "password:", "*Delete #Confirm", ""};
 const String MENU_WIRE[] = {"Wire function", "1.-W1 =    2.-W2 =  ", "3.-W3 =    4.-W4 =", ""};
@@ -104,18 +114,18 @@ bool bALARM = true;
 bool bGRENADE = true;
 
 bool bSHOCK = false;
-byte SHOCK_SENSIBILITY = 75; 
+byte SHOCK_SENSITIVITY = 75; // Variable name is consistent now
 
 bool bPASS = true; // Password lock
 String PASS = "123ABC"; // Password
 
 bool bWIRE = false; // Wire lock
-int tWIRE[4] = {2, 3, 3, 3}; // Wire effect: 1=-10sec 2=stopBomb 3=nothing 4=boom!
+int tWIRE[4] = {2, 3, 3, 3}; // Wire effect: 1=Reduce time 2=Stop bomb 3=Do nothing 4=Explode!
 
 bool bNFC = false; // NFC lock
 
-unsigned long GAME_CLOCK = 60000; // 10 min in centiseconds  
-unsigned long BOMB_CLOCK = 30000; // 5 min in centiseconds
+unsigned long GAME_CLOCK = 60000; // Game time in centiseconds (10 min)
+unsigned long BOMB_CLOCK = 30000; // Bomb time in centiseconds (5 min)
 int ARM_DISARM_TIME = 10; // Bomb arm/disarm time in seconds
 int INIT_TIME = 10; // Game start time in seconds
 
@@ -123,6 +133,7 @@ int INIT_TIME = 10; // Game start time in seconds
 
 void setup() {
   Serial.begin(9600);
+  DEBUG_PRINTLN(F("Serial Debug Enabled. Initializing..."));
   Wire.begin();
   accel.begin();
   lcd.init();
@@ -143,6 +154,9 @@ void setup() {
   pinMode(RED_BTN, INPUT_PULLUP);
   pinMode(GREEN_BTN, INPUT_PULLUP);
 
+// Call setup2() once during initialization
+  setup2();
+  DEBUG_PRINTLN(F("Setup complete."));
 }
 
 void setup2() {
@@ -154,7 +168,7 @@ void setup2() {
 }
 
 void loop() {
-  setup2();
+// Don't call setup2() repeatedly
   menu();
 }
 

@@ -10,7 +10,8 @@ void writeNFC(byte data[]) {
 void readNFC(byte data[]) {
   MFRC522::StatusCode status;
   status = (MFRC522::StatusCode) mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &nfcKey, &(mfrc522.uid));
-  status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockNumber, data, 18);
+  // Read 16 bytes (standard block size) instead of 18
+  status = (MFRC522::StatusCode) mfrc522.MIFARE_Read(blockNumber, data, 16);
 }
 
 void mfr_halt() {
@@ -23,10 +24,9 @@ void waitForNewNFC() {
   lcd.setCursor(0, 0);
   lcd.print("Place card on reader");
   while ( ! mfrc522.PICC_IsNewCardPresent() || ! mfrc522.PICC_ReadCardSerial());
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Card detected!");
+  }
   beep();
 }
-
-void beep() {
-  tone(BUZZPIN, 500, 100);
-}
-

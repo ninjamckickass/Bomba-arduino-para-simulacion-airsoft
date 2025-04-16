@@ -14,11 +14,10 @@
 // Optional difficulty modifiers:
 // - Accelerometer: Excessive movement causes premature detonation
 // - Password: 5-digit code required to defuse bomb
-// - Sling mounting points available for transport (sling not included)
 
 void counterstrike() {
-  unsigned long relojBomba = 0;
-  unsigned long relojJuego = 0;
+  unsigned long bombTimer = 0;
+  unsigned long gameTimer = 0;
   String pass = "";
   bool bp = bPASS,
        bk = bNFC;
@@ -28,23 +27,23 @@ void counterstrike() {
   printActiveGames(bp, false, bk, 0, false);
   int lastPercentage = 0;
   unsigned long game_counter = millis();
-  while (relojJuego < RELOJ_JUEGO && !bombActive) {
+  while (gameTimer < GAME_CLOCK && !bombActive) {
     if (countMillis(10, game_counter)) {
-      relojJuego++;
-      showTime(RELOJ_JUEGO - relojJuego);
+      gameTimer++;
+      showTime(GAME_CLOCK - gameTimer);
     }
     if (bp && checkPass(pass)) {
       bp = false;
       printActiveGames(bp, false, bk, 0, false);
     }
-    if (bk && checkNFC(relojBomba)) {
+    if (bk && checkNFC(bombTimer)) {
       bk = false;
       printActiveGames(bp, false, bk, 0, false);
     }
     if (!bp && !bk && pushedButton(RED_BTN, false, 3)) bombActive = true;
     buzzing();
   }
-  if (relojJuego < RELOJ_JUEGO) {
+  if (gameTimer < GAME_CLOCK) {
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print(BOMB_ACTIVE);
@@ -55,11 +54,11 @@ void counterstrike() {
     drawEmptyProgressBar(2);
     printActiveGames(bp, false, bk, 0, true);
     game_counter = millis();
-    while (relojBomba < RELOJ_BOMBA && !win) {
+    while (bombTimer < BOMB_CLOCK && !win) {
       if (countMillis(10, game_counter)) {
-        relojBomba++;
-        showTime(RELOJ_BOMBA - relojBomba);
-        int x = calculatePercentage(relojBomba, RELOJ_BOMBA);
+        bombTimer++;
+        showTime(BOMB_CLOCK - bombTimer);
+        int x = calculatePercentage(bombTimer, BOMB_CLOCK);
         if (lastPercentage != x) {
           drawPercentage(16, 2, x);
           int from = percentageBarPosition(lastPercentage, 30);
@@ -69,20 +68,20 @@ void counterstrike() {
         }
       }
       buzzing();
-      if (relojBomba >= RELOJ_BOMBA) {
-        relojBomba = RELOJ_BOMBA;
+      if (bombTimer >= BOMB_CLOCK) {
+        bombTimer = BOMB_CLOCK;
         drawProgressBar(lastPercentage, 30, 30, 0, 2);
       }
       if (bp && checkPass(pass)) {
         bp = false;
-        lcdBorra(0, 1, 19, 1);
+        lcdClear(0, 1, 19, 1);
         printActiveGames(bp, false, bk, 0, true);
       }
-      if (bk && checkNFC(relojBomba)) {
+      if (bk && checkNFC(bombTimer)) {
         bk = false;
         printActiveGames(bp, false, bk, 0, true);
       }
-      if (!bp && !bk && pushedButton(GREEN_BTN, false, 3)) { // && green button pulsado
+      if (!bp && !bk && pushedButton(GREEN_BTN, false, 3)) {
         win = true;
       }
     }

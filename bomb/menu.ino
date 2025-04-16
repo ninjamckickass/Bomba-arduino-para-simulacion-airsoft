@@ -5,7 +5,7 @@ void menu() {
   drawBomb(17, 0);
   switch (validOption(1, 2)) {
     case 1:
-      menuJuego();
+      menuGame();
       break;
     case 2:
       menuConfig();
@@ -13,7 +13,7 @@ void menu() {
   }
 }
 
-void menuJuego() {
+void menuGame() {
   int opt;
   do {
     printScreen(GAME_MENU);
@@ -57,10 +57,10 @@ void menuConfig() {
         menuTime();
         break;
       case 2:
-        menuLockers();
+        menuLocks();
         break;
       case 3:
-        menuOtherOpt();
+        menuOtherOptions();
         break;
       case 4:
         test();
@@ -79,11 +79,11 @@ void menuTime() {
       case 1:
         while (opt != 0) {
           printScreen(MENU_TIME2);
-          printLong(RELOJ_JUEGO, 0, 1);
+          printLong(GAME_CLOCK, 0, 1);
           opt = validOption(0, 1);
           if (opt == 1) {
             int auxR[4];
-            RELOJ_JUEGO = readTime(auxR);
+            GAME_CLOCK = readTime(auxR);
           }
         }
         opt = -1;
@@ -91,11 +91,11 @@ void menuTime() {
       case 2:
         while (opt != 0) {
           printScreen(MENU_TIME2);
-          printLong(RELOJ_BOMBA, 0, 1);
+          printLong(BOMB_CLOCK, 0, 1);
           opt = validOption(0, 1);
           if (opt == 1) {
             int auxR[4];
-            RELOJ_BOMBA = readTime(auxR);
+            BOMB_CLOCK = readTime(auxR);
           }
         }
         opt = -1;
@@ -104,10 +104,10 @@ void menuTime() {
         while (opt != 0) {
           printScreen(MENU_TIME2);
           lcd.setCursor(0, 1);
-          lcd.print(TIME_ARMDES);
+          lcd.print(ARM_DISARM_TIME);
           lcd.print(" seconds");
           opt = validOption(0, 1);
-          if (opt == 1) TIME_ARMDES = readSeconds();
+          if (opt == 1) ARM_DISARM_TIME = readSeconds();
         }
         opt = -1;
         break;
@@ -126,14 +126,14 @@ void menuTime() {
   } while (opt != 0);
 }
 
-void menuLockers() {//1.-Active locks", "2.-Password", "3.-Wires", "4.-NFC keys
+void menuLocks() {//1.-Active locks", "2.-Password", "3.-Wires", "4.-NFC keys
   int opt;
   do {
-    printScreen(MENU_LOCKERS);
+    printScreen(MENU_LOCKS);
     opt = validOption(0, 4);
     switch (opt) {
       case 1:
-        menuActiveLockers();
+        menuActiveLocks();
         break;
       case 2:
         while (opt != 0) {
@@ -190,11 +190,11 @@ void menuNfc() {
           opt = validOption(0, 3);
           switch (opt) {
             case 1:
-              printScreen(MENU_NFC_TIPO);
+              printScreen(MENU_NFC_TYPE);
               data[0] = validOption(1, 3);
               break;
             case 2:
-              printScreen(MENU_NFC_USOS);
+              printScreen(MENU_NFC_USES);
               data[1] = validOption(1, 'A');// A = infinite uses
               break;
             case 3:
@@ -225,13 +225,13 @@ void menuNfc() {
   opt = -1;
 }
 
-void menuActiveLockers() {
+void menuActiveLocks() {
   int opt;
-  printScreen(MENU_ACTIVE_LOCKERS);
+  printScreen(MENU_ACTIVE_LOCKS);
   do {
-    check(MENU_ACTIVE_LOCKERS[0].length() + 1, 0, bPASS);
-    check(MENU_ACTIVE_LOCKERS[1].length() + 1, 1, bWIRE);
-    check(MENU_ACTIVE_LOCKERS[2].length() + 1, 2, bNFC);
+    check(MENU_ACTIVE_LOCKS[0].length() + 1, 0, bPASS);
+    check(MENU_ACTIVE_LOCKS[1].length() + 1, 1, bWIRE);
+    check(MENU_ACTIVE_LOCKS[2].length() + 1, 2, bNFC);
     opt = validOption(0, 3);
     if (opt == 1) bPASS = !bPASS;//Password
     if (opt == 2) bWIRE = !bWIRE;//Wires
@@ -239,7 +239,7 @@ void menuActiveLockers() {
   } while (opt != 0); //0.-Back
 }
 
-void menuOtherOpt() {
+void menuOtherOptions() {
   int opt;
   printScreen(MENU_OTHER_OPT);
   do {
@@ -260,26 +260,26 @@ void menuShock() {
     printScreen(MENU_SHOCK);
     check(MENU_SHOCK[0].length() + 1, 0, bSHOCK);
     lcd.setCursor(0, 3);
-    lcd.print(SHOCK_SENSIBILITY);
+    lcd.print(SHOCK_SENSITIVITY); // Changed from SHOCK_SENSIBILITY
     opt = validOption(0, 2);
     if (opt == 1) bSHOCK = !bSHOCK;
     else if (opt == 2) {
       do {
         printScreen(MENU_SHOCK2);
         lcd.setCursor(0, 3);
-        lcd.print(SHOCK_SENSIBILITY);
+        lcd.print(SHOCK_SENSITIVITY); // Changed from SHOCK_SENSIBILITY
         opt = validOption(0, 2);
         switch (opt) {
           case 1:
-            //manual adjustment SHOCK_SENSIBILITY != 0
+            //manual adjustment SHOCK_SENSITIVITY != 0
             printScreen(INTRO2NUM);
             opt = validOption(0, 9);
             lcd.setCursor(2, 0);
             lcd.print(opt);
-            SHOCK_SENSIBILITY = opt * 10;
+            SHOCK_SENSITIVITY = opt * 10; // Changed from SHOCK_SENSIBILITY
             if (opt == 0) opt = validOption(1, 9);
             else opt = validOption(0, 9);
-            SHOCK_SENSIBILITY += opt;
+            SHOCK_SENSITIVITY += opt; // Changed from SHOCK_SENSIBILITY
             lcd.print(opt);
             opt = -1;
             break;
@@ -290,8 +290,8 @@ void menuShock() {
             byte s = 0;
             while (s == 0)
               s = accel.readTap();
-            pita();
-            SHOCK_SENSIBILITY = s;
+            beep();
+            SHOCK_SENSITIVITY = s; // Changed from SHOCK_SENSIBILITY
             break;
         }
       } while (opt != 0);
@@ -344,7 +344,7 @@ void test() {
       lcd.print("Z");
     }
     if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
-      lcdBorra(4, 3, 19, 3);
+      lcdClear(4, 3, 19, 3);
       lcd.setCursor(4, 3);
 
       for (byte i = 0; i < mfrc522.uid.size; i++) {
@@ -401,13 +401,13 @@ void printData(byte data[]) {
     if (data[2] < 10) lcd.print("0");
     lcd.print(data[2]);
     lcd.print(":");
-    if (data[3] < 10) lcd.print("0");
+    if (data[3] < 10) lcd print("0");
     lcd.print(data[3]);
     lcd.print(":");
-    if (data[4] < 10) lcd.print("0");
+    if (data[4] < 10) lcd print("0");
     lcd.print(data[4]);
     lcd.print(":");
-    if (data[5] < 10) lcd.print("0");
+    if (data[5] < 10) lcd print("0");
     lcd.print(data[5]);*/
 }
 
@@ -418,7 +418,7 @@ int validOption(int minOpt, int maxOpt) {
     opt = keypad.waitForKey() - '0';
     if (opt > 9) opt += '0'; // if it's a letter
   } while (opt < minOpt || opt > maxOpt);
-  pita();
+  beep();
   return opt;
 }
 
@@ -428,19 +428,6 @@ void printScreen(const String m[]) {
     lcd.setCursor(0, i);
     lcd.print(m[i]);
   }
-}
-
-void lcdBorraFila(int fila) {
-  lcd.setCursor(0, fila);
-  lcd.print("                    ");
-}
-
-void lcdBorra(int col, int fil, int endCol, int endFil) {
-  for (int f = fil; f <= endFil; f++)
-    for (int c = col; c <= endCol; c++) {
-      lcd.setCursor(c, f);
-      lcd.print(" ");
-    }
 }
 
 int readSeconds() {
@@ -468,13 +455,25 @@ unsigned long readTime(int t[4]) {
   lcd.setCursor(0, 2);
   int key;
   for (int i = 0; i < 8; i++) {
-    if (i == 2 || i == 4) key = validOption(0, 5);
-    else key = validOption(0, 5);
-    ld.write(8 - i, NUM[key] );
-    lcd.print(key);
+    int maxDigit = 9;
+    // Tens digit for minutes (i=2) or seconds (i=4) must be 0-5
+    if (i == 2 || i == 4) {
+        maxDigit = 5;
+    }
+    // Get key ensuring it's within the valid range for the current digit
+    do {
+        key = keypad.waitForKey() - '0';
+    } while (key < 0 || key > maxDigit);
+    beep(); // Beep after valid key
+
+    ld.write(8 - i, NUM[key] ); // Display digit on LED
+    lcd.print(key); // Display digit on LCD
     t[(int)i / 2] += key;
-    if (i % 2 == 0) t[(int)i / 2] *= 10;
-    else lcd.print(":");
+    if (i % 2 == 0) {
+        t[(int)i / 2] *= 10; // Shift tens digit
+    } else if (i < 7) { // Don't print ':' after the last digit
+        lcd.print(":"); // Print separator
+    }
   }
   unsigned long mul_h = 360000,
        mul_m = 6000,
@@ -498,37 +497,40 @@ void printLong(unsigned long t, int col, int fil) {
     if (h < 10) lcd.print("0");
     lcd.print(h);
     lcd.print(":");
-    if (m < 10) lcd.print("0");
+    if (m < 10) lcd print("0");
     lcd.print(m);
     lcd.print(":");
-    if (s < 10) lcd.print("0");
+    if (s < 10) lcd print("0");
     lcd.print(s);
     lcd.print(":");
-    if (cs < 10) lcd.print("0");
+    if (cs < 10) lcd print("0");
     lcd.print(cs);*/
 }
 
 void newPass() {
   printScreen(NEW_PASS);
-  char auxPass[20];
+  char auxPass[21]; // Increased size by 1 for null terminator
   char key;
   int i = 0;
   do {
     key = keypad.waitForKey();
-    pita();
+    beep();
     if (key == '*' && i != 0) i--;
+    // Ensure not to write past buffer boundary (leave space for null terminator)
     else if (key != '#' && key != '*' && i < 20) {
       auxPass[i] = key;
       i++;
     }
-    lcdBorra(0, 3, 19, 3);
-    for (int i2 = 0; i < i; i++) {
-      lcd.setCursor(i2, 3);
+    lcdClear(0, 3, 19, 3);
+    lcd.setCursor(0, 3); // Set cursor before loop
+    for (int i2 = 0; i < i; i2++) {
+      // lcd.setCursor(i2, 3); // Setting cursor repeatedly in loop is inefficient
       lcd.print(auxPass[i2]);
     }
   } while (key != '#');
+  auxPass[i] = '\0'; // Add null terminator
   if (i == 0) PASS = "";
-  else PASS = String(auxPass).substring(0, i);
+  else PASS = String(auxPass); // String constructor handles null terminator
 }
 
 void check(int col, int fil , bool yesno) {
@@ -538,5 +540,9 @@ void check(int col, int fil , bool yesno) {
   lcd.createChar(1, yesCheck);
   lcd.setCursor(col, fil);
   lcd.write((int)yesno);
+}
+
+void beep() {
+  tone(BUZZPIN, 500, 100);
 }
 
