@@ -5,17 +5,28 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
+#include <stdio.h> // Required for vsnprintf
+#include <stdarg.h> // Required for va_list, va_start, va_end
 
 // --- Debugging ---
 #define DEBUG // Comment this line out to disable Serial debugging
 #ifdef DEBUG
   #define DEBUG_PRINT(x) Serial.print(x)
   #define DEBUG_PRINTLN(x) Serial.println(x)
-  #define DEBUG_PRINTF(fmt, ...) Serial.printf(fmt, __VA_ARGS__)
+  // Helper function for printf-style debugging
+  void debugPrintf(const char *fmt, ...) {
+    char buf[128]; // Create a buffer for the formatted string
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buf, sizeof(buf), fmt, args); // Format the string into the buffer
+    va_end(args);
+    Serial.print(buf); // Print the buffer
+  }
+  #define DEBUG_PRINTF(fmt, ...) debugPrintf(fmt, __VA_ARGS__)
 #else
   #define DEBUG_PRINT(x)
   #define DEBUG_PRINTLN(x)
-  #define DEBUG_PRINTF(fmt, ...)
+  #define DEBUG_PRINTF(fmt, ...) // Keep this empty for non-debug builds
 #endif
 // --- End Debugging ---
 
@@ -128,8 +139,12 @@ unsigned long GAME_CLOCK = 60000; // Game time in centiseconds (10 min)
 unsigned long BOMB_CLOCK = 30000; // Bomb time in centiseconds (5 min)
 int ARM_DISARM_TIME = 10; // Bomb arm/disarm time in seconds
 int INIT_TIME = 10; // Game start time in seconds
+void showTime(unsigned long t);
+void menu();
 
 //------------------------------------------------------------------------------------
+
+
 
 void setup() {
   Serial.begin(9600);
@@ -155,8 +170,8 @@ void setup() {
   pinMode(GREEN_BTN, INPUT_PULLUP);
 
 // Call setup2() once during initialization
-  setup2();
-  DEBUG_PRINTLN(F("Setup complete."));
+
+//  DEBUG_PRINTLN(F("Setup complete."));
 }
 
 void setup2() {
@@ -168,9 +183,6 @@ void setup2() {
 }
 
 void loop() {
-// Don't call setup2() repeatedly
+  setup2();
   menu();
 }
-
-
-

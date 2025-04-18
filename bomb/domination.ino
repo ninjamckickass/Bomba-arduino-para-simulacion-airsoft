@@ -182,4 +182,3 @@ void updateDominationStatus(bool dominator[2]) {
   }
   lcdClearRow(3); // Clear button progress row when status changes
 }
-

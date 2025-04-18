@@ -117,4 +117,3 @@ void assault() {
   winMessage(greenWins, 0); // Show winner on top row
   alarm(true); // Sound alarm at end of game
 }
-

@@ -85,7 +85,7 @@ bool checkNFC(unsigned long &timer) {
     DEBUG_PRINT(F("checkNFC: Card UID:"));
     for (byte i = 0; i < mfrc522.uid.size; i++) {
       DEBUG_PRINT(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
-      DEBUG_PRINT(mfrc522.uid.uidByte[i], HEX);
+      Serial.print(mfrc522.uid.uidByte[i], HEX); // Use Serial.print directly for HEX format
     }
     DEBUG_PRINTLN("");
     DEBUG_PRINTF("checkNFC: Card Data (Uses: %d, Type: %d, Time: %lu)\n", readData[1], readData[0], (unsigned long)readData[2] * 360000 + (unsigned long)readData[3] * 6000 + (unsigned long)readData[4] * 100 + readData[5]);
@@ -199,6 +199,8 @@ void drawPercentage(int column, int row, int percentage) {
   lcd.print(percentage);
   lcd.print("%");
 }
+
+
 
 void drawProgressBar(int from, int to, int maxPercentage, int column, int row) {
   byte bar10[] = {0x0F, 0x18, 0x13, 0x17, 0x17, 0x13, 0x18, 0x0F}; //left end full
@@ -394,7 +396,7 @@ void buzzing() {
   }
 }
 
-() {
+void beep() {
   tone(BUZZPIN, 500, 100);
 }
 
@@ -476,4 +478,3 @@ void lcdClear(int col, int row, int endCol, int endRow) {
       lcd.print(" ");
     }
 }
-

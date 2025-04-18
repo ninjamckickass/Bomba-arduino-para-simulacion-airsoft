@@ -89,4 +89,3 @@ void counterstrike() {
   winMessage(win, 1);
   alarm(true);
 }
-
